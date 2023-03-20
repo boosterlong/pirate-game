@@ -1,14 +1,24 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import GameView from './views/gameView';
-import OpeningSplash from './views/secondScreen'
+import initialImage from './components/images/pirate_king.png';
+import SecondScreen from './views/secondScreen';
+import { sharkStory } from './components/encounters/sharkEncounter';
 import { useState } from 'react';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
 
-  const [prompt, setPrompt] = useState("Avast ye! A legendary treasure guarded by a cursed island and sea monster awaits. Brave adventurers needed to claim riches and earn pirate respect. Will ye take the quest, or will ye walk the plank?")
+  let prompt = "Welcome to Pirate Game 2023. Would you like to play?"
+
+  const [content, setContent] = useState({
+    content: {
+      prompt: prompt,
+      image: initialImage,
+      adventure: sharkStory,
+    }
+  })
 
   return (
     <NavigationContainer>
@@ -17,14 +27,15 @@ export default function App() {
             name="Game"
             options={{title: 'Pirate Quest 2023'}}
             component={GameView}
-            initialParams={{
-              prompt: prompt,
-            }}
+            initialParams={content}
           />
         <Stack.Screen
             name="Menu"
             options={{title: 'Menu'}}
-            component={OpeningSplash}
+            component={SecondScreen}
+            initialParams={
+              resetAdventure=setContent
+            }
           />
       </Stack.Navigator>
     </NavigationContainer>

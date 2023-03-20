@@ -12,6 +12,13 @@ const SecondScreen = ({navigation}) => {
                   onPress={() => 
                   navigation.navigate('Game')}
               />
+              <Button
+                  title="Reset Adventure"
+                  onPress={() => 
+                    this.resetAdventure({
+                      content: {}
+                    })}
+              />
             </View>
         </View>
     )

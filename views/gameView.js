@@ -1,34 +1,53 @@
-import React, { Component, useState } from 'react';
-import { StyleSheet, View, Image, TouchableOpacity, Text, Button } from 'react-native';
+import React, { Component } from 'react';
+import { StyleSheet, View, Image, TouchableOpacity, Text } from 'react-native';
+import { getNextEncounter, sharkStory } from '../components/encounters/sharkEncounter'
 
 class GameView extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      encounter: {
+        prompt: this.props.route.params.content.prompt,
+        buttonText: "",
+      },
+      chapter: 1,
+      adventure: this.props.route.params.content.adventure,
+    }
   }
 
   render() {
+    const updateEncounter = (newEncounter) => {
+      
+      return (
+        <TouchableOpacity style={styles.button}
+          onPress={() => this.setState({encounter: newEncounter, chapter: this.state.chapter+1})}
+        >
+          <Text>{newEncounter?.buttonText}</Text>
+        </TouchableOpacity>
+      )
+    }
+
     return (
       <View style={styles.container}>
         {/* This will render the background image  */}
         <Image source={require('../components/images/island_backdrop.png')} style={styles.backgroundImage} />
+
         {/* The image container. */}
         <View style={styles.imageContainer}>
-          <Image source={require('../components/images/pirate_king.png')} style={styles.image} />
+          <Image source={this.props.route.params.content.image} style={styles.image} />
         </View>
+
         {/* The prompt container. */}
-          <View style={styles.promptContainer}>
-            <Text style={styles.promptCopy}>{this.props.route.params.prompt}</Text>
-          </View>
+        <View style={styles.promptContainer}>
+          <Text style={styles.promptCopy}>{this.state.encounter.prompt}</Text>
+        </View>
+
         {/* Button container */}
         <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.button}>
-            <Text>Accept Quest</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <Text>Decline Quest</Text>
-          </TouchableOpacity>
+          {updateEncounter(getNextEncounter(this.state.adventure, this.state.chapter))}
         </View>
+
         <TouchableOpacity style={styles.secondScreen}
           onPress={() => 
             this.props.navigation.navigate('Menu')
